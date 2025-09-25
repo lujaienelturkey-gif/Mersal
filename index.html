@@ -61,7 +61,7 @@
 
 <header>
   <div class="logo">🎵</div>
-  <div class="subtitle">ابعتها لمهجة 😂❤️</div>
+  <div class="subtitle">😂❤️ابعتها لمهجة </div>
 </header>
 
 <main>
@@ -86,13 +86,19 @@ const fileInput = document.getElementById('fileInput')
 const uploadBtn = document.getElementById('uploadBtn')
 const tracksList = document.getElementById('tracksList')
 
+// تحميل كل التراكات وحالة المربع الاخضر
 async function loadTracks(){
-  const { data, error } = await supabase.storage.from(bucketName).list()
+  const { data: files, error } = await supabase.storage.from(bucketName).list()
   tracksList.innerHTML = ""
   if(error) return console.error(error)
-  for(const file of data){
+
+  // جلب حالة المربعات من الجدول
+  const { data: selections } = await supabase.from('track_selections').select('*')
+
+  for(const file of files){
     const { data: urlData } = supabase.storage.from(bucketName).getPublicUrl(file.name)
     const url = urlData.publicUrl
+
     const trackDiv = document.createElement('div')
     trackDiv.className = 'track'
     trackDiv.innerHTML = `
@@ -103,10 +109,25 @@ async function loadTracks(){
       </div>
     `
     const box = trackDiv.querySelector('.green-box')
-    box.addEventListener('click', ()=>{
-      box.classList.toggle('active')
-      box.innerHTML = box.classList.contains('active') ? '✓' : ''
+
+    // تعيين الحالة من DB
+    const selected = selections.find(s=>s.file_name===file.name)?.selected
+    if(selected){
+      box.classList.add('active')
+      box.innerHTML = '✓'
+    }
+
+    // عند الضغط يحدث DB
+    box.addEventListener('click', async ()=>{
+      const newState = !box.classList.contains('active')
+      box.classList.toggle('active', newState)
+      box.innerHTML = newState ? '✓' : ''
+      await supabase.from('track_selections').upsert({
+        file_name: file.name,
+        selected: newState
+      })
     })
+
     tracksList.appendChild(trackDiv)
   }
 }
@@ -114,7 +135,9 @@ async function loadTracks(){
 uploadBtn.addEventListener('click', async ()=>{
   const file = fileInput.files[0]
   if(!file) return alert("اختار ملف الأول!")
-  const filePath = `${Date.now()}_${file.name}`
+  const safeName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, "_")
+  const filePath = `${Date.now()}_${safeName}`
+
   const { error } = await supabase.storage.from(bucketName).upload(filePath, file)
   if(error){
     alert("حصلت مشكلة في الرفع: " + error.message)
