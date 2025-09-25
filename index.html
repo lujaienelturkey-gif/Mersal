@@ -4,212 +4,168 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ابعتها لمهجة</title>
+  <script src="https://unpkg.com/@supabase/supabase-js"></script>
   <style>
     body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f0f8ff;
-      margin: 0;
-      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #f8f8f8;
       text-align: center;
+      padding: 20px;
     }
     header {
-      background-color: #007bff;
-      color: white;
+      font-size: 26px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    header span {
+      font-size: 20px;
+      margin-right: 10px;
+    }
+    #login, #welcome {
+      margin: 40px auto;
+      max-width: 400px;
+      background: #fff;
       padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    header h1 {
-      margin: 0;
-      font-size: 2.5em;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-    }
-    .emojis {
-      font-size: 1em; /* نفس حجم النص */
-    }
-    .pin-box {
-      margin: 50px auto;
-      max-width: 300px;
-      padding: 20px;
-      border: 2px solid #007bff;
-      border-radius: 10px;
-      background: white;
-    }
-    .pin-box input {
-      width: 100%;
-      padding: 10px;
-      font-size: 1em;
-      margin-bottom: 10px;
-    }
-    .pin-box button {
-      padding: 10px 20px;
-      font-size: 1em;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-    .pin-box button:hover {
-      background-color: #0056b3;
-    }
-    #welcomeBox {
-      display: none;
-      margin: 20px auto;
-      max-width: 500px;
-      background: white;
-      border: 2px solid #007bff;
-      border-radius: 10px;
-      padding: 20px;
-      animation: fadeIn 1s ease;
-    }
-    #welcomeBox button {
-      margin-top: 15px;
-      padding: 10px 20px;
-      font-size: 1em;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    #welcomeBox button:hover {
-      background-color: #1e7e34;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.9); }
-      to { opacity: 1; transform: scale(1); }
-    }
-    #mainContent {
-      display: none;
-      padding: 20px;
-    }
+    #welcome { display: none; }
     .track {
-      margin: 15px 0;
+      background: #fff;
+      margin: 10px auto;
       padding: 10px;
-      border: 1px solid #007bff;
-      border-radius: 8px;
-      background: #e9f5ff;
+      border-radius: 10px;
+      max-width: 500px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      box-shadow: 0 0 6px rgba(0,0,0,0.1);
     }
     .track button {
-      margin-left: 10px;
-      padding: 5px 10px;
       background: #007bff;
-      color: white;
+      color: #fff;
       border: none;
-      border-radius: 5px;
+      padding: 6px 12px;
+      border-radius: 8px;
       cursor: pointer;
     }
     .track button:hover {
       background: #0056b3;
     }
-    .checkbox {
-      width: 20px;
-      height: 20px;
-      border: 2px solid #28a745;
-      display: inline-block;
-      margin-left: 10px;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-    .checkbox.checked {
-      background-color: #28a745;
-      position: relative;
-    }
-    .checkbox.checked::after {
-      content: '✔';
-      color: white;
-      position: absolute;
-      top: -4px;
-      left: 2px;
-      font-size: 16px;
+    #uploadBox {
+      margin: 20px auto;
+      padding: 15px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.1);
+      max-width: 500px;
     }
   </style>
 </head>
 <body>
+
   <header>
-    <h1>
-      ابعتها لمهجة 
-      <span class="emojis">😂❤️</span>
-    </h1>
+    ابعتها لمهجة <span>😂❤️</span>
   </header>
 
-  <div id="pinContainer" class="pin-box">
-    <p>اكتب الكود هنا يا تامر</p>
-    <input type="password" id="pinInput" placeholder="PIN code">
-    <button onclick="checkPin()">يلا أوبح</button>
+  <!-- شاشة الـ PIN -->
+  <div id="login">
+    <p>ادخل الكود السري:</p>
+    <input type="password" id="pinInput">
+    <button onclick="checkPin()">دخول</button>
   </div>
 
-  <div id="welcomeBox">
-    <p>بما إن مفيش تواصل بينا غير عن طريق مرسال ف انا عملت مرسال محدش يشوفه غيري انا وانت , مش هنتكلم بس تقدر تبعتلي أغنية أو فويس نوت .. و ربنا يخليك لينا يا باشا</p>
+  <!-- رسالة الترحيب -->
+  <div id="welcome">
+    <p id="welcomeMsg">
+      بما إن مفيش تواصل بينا غير عن طريق مرسال ف انا عملت مرسال محدش يشوفه غيري انا وانت , 
+      مش هنتكلم بس تقدر تبعتلي أغنية أو فويس نوت .. 
+      و ربنا يخليك لينا يا باشا
+    </p>
     <button onclick="enterSite()">خش برجلك اليمين</button>
   </div>
 
-  <div id="mainContent">
-    <h2>التراكات</h2>
-    <input type="file" id="fileUpload" accept="audio/*">
-    <button onclick="uploadTrack()">ارفع تراك</button>
-    <div id="trackList"></div>
+  <!-- المحتوى الرئيسي -->
+  <div id="mainContent" style="display:none;">
+    <div id="uploadBox">
+      <h3>ارفع تراك جديد 🎵</h3>
+      <input type="file" id="fileInput" accept="audio/*">
+      <button onclick="uploadTrack()">Upload</button>
+    </div>
+    <h3>التراكات المرفوعة:</h3>
+    <div id="tracks"></div>
   </div>
 
   <script>
-    const PIN = "10326";
+    // بيانات Supabase
+    const SUPABASE_URL = "https://esdsowghlkzvhtciptzw.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzZHNvd2dobGt6dmh0Y2lwdHp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg3OTUyMDcsImV4cCI6MjA3NDM3MTIwN30.UbcxM3aPtxNclA5G865eFQrKbqR7JaR6vWfoc68INic";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // الكود السري
+    const PIN_CODE = "1234"; // غيريه باللي تحبيه
+
     function checkPin() {
       const pin = document.getElementById("pinInput").value;
-      if (pin === PIN) {
-        document.getElementById("pinContainer").style.display = "none";
-        const box = document.getElementById("welcomeBox");
-        box.style.display = "block";
-        box.style.animation = "none";
-        void box.offsetHeight;
-        box.style.animation = null;
+      if (pin === PIN_CODE) {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("welcome").style.display = "block";
       } else {
-        alert("الكود غلط يا تامر 😅");
+        alert("الكود غلط 😅");
       }
     }
 
     function enterSite() {
-      document.getElementById("welcomeBox").style.display = "none";
+      document.getElementById("welcome").style.display = "none";
       document.getElementById("mainContent").style.display = "block";
+      loadTracks();
     }
 
-    function uploadTrack() {
-      const fileInput = document.getElementById("fileUpload");
-      if (fileInput.files.length === 0) {
-        alert("اختار تراك الأول يا معلم!");
+    async function uploadTrack() {
+      const fileInput = document.getElementById("fileInput");
+      if (fileInput.files.length === 0) return alert("اختار ملف الأول!");
+
+      const file = fileInput.files[0];
+      const filePath = `${Date.now()}_${file.name}`;
+
+      // رفع على storage
+      let { data, error } = await supabase.storage.from("tracks").upload(filePath, file);
+      if (error) {
+        alert("حصلت مشكلة في الرفع: " + error.message);
         return;
       }
-      const file = fileInput.files[0];
-      const trackList = document.getElementById("trackList");
 
-      const trackDiv = document.createElement("div");
-      trackDiv.className = "track";
+      // حفظ لينك في الداتابيز
+      const { error: dbError } = await supabase.from("tracks").insert([{ filename: filePath }]);
+      if (dbError) {
+        alert("مشكلة في الحفظ: " + dbError.message);
+      } else {
+        loadTracks();
+      }
+    }
 
-      const audio = document.createElement("audio");
-      audio.controls = true;
-      audio.src = URL.createObjectURL(file);
+    async function loadTracks() {
+      const { data, error } = await supabase.from("tracks").select("*");
+      if (error) {
+        alert("مشكلة في تحميل التراكات");
+        return;
+      }
 
-      const downloadBtn = document.createElement("a");
-      downloadBtn.textContent = "نزلني";
-      downloadBtn.href = audio.src;
-      downloadBtn.download = file.name;
-      downloadBtn.className = "download-btn";
+      const container = document.getElementById("tracks");
+      container.innerHTML = "";
+      for (let row of data) {
+        const { data: urlData } = supabase.storage.from("tracks").getPublicUrl(row.filename);
 
-      const checkbox = document.createElement("div");
-      checkbox.className = "checkbox";
-      checkbox.onclick = () => checkbox.classList.toggle("checked");
-
-      trackDiv.appendChild(audio);
-      trackDiv.appendChild(downloadBtn);
-      trackDiv.appendChild(checkbox);
-
-      trackList.appendChild(trackDiv);
-
-      fileInput.value = "";
+        const div = document.createElement("div");
+        div.className = "track";
+        div.innerHTML = `
+          <audio controls src="${urlData.publicUrl}"></audio>
+          <a href="${urlData.publicUrl}" download>
+            <button>نزلني</button>
+          </a>
+        `;
+        container.appendChild(div);
+      }
     }
   </script>
 </body>
