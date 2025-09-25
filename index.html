@@ -6,198 +6,210 @@
   <title>ابعتها لمهجة</title>
   <style>
     body {
-      font-family: "Comic Sans MS", cursive, sans-serif;
+      font-family: 'Arial', sans-serif;
       background-color: #f0f8ff;
-      color: #333;
-      text-align: center;
       margin: 0;
       padding: 0;
-      direction: rtl;
+      text-align: center;
     }
     header {
       background-color: #007bff;
       color: white;
       padding: 20px;
     }
-    h1 {
-      font-size: 2.5rem;
+    header h1 {
       margin: 0;
-    }
-    h2 {
-      font-size: 1.5rem;
-      margin-top: 5px;
-    }
-    main {
-      padding: 20px;
-    }
-    .track {
+      font-size: 2.5em;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 10px;
-      margin: 10px 0;
-    }
-    .track audio {
-      flex: 1;
-      margin: 0 10px;
-    }
-    .checkbox {
-      width: 25px;
-      height: 25px;
-      border: 2px solid #007bff;
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
       justify-content: center;
-      cursor: pointer;
+      align-items: center;
+      gap: 10px;
     }
-    .checkbox.checked {
-      background-color: #28a745;
-      color: white;
+    .emojis {
+      font-size: 1em; /* نفس حجم النص */
     }
-    .download-btn {
-      background: #007bff;
+    .pin-box {
+      margin: 50px auto;
+      max-width: 300px;
+      padding: 20px;
+      border: 2px solid #007bff;
+      border-radius: 10px;
+      background: white;
+    }
+    .pin-box input {
+      width: 100%;
+      padding: 10px;
+      font-size: 1em;
+      margin-bottom: 10px;
+    }
+    .pin-box button {
+      padding: 10px 20px;
+      font-size: 1em;
+      background-color: #007bff;
       color: white;
       border: none;
-      padding: 6px 12px;
-      border-radius: 5px;
       cursor: pointer;
+      border-radius: 5px;
+    }
+    .pin-box button:hover {
+      background-color: #0056b3;
     }
     #welcomeBox {
       display: none;
-      background: #fff;
-      border: 2px solid #007bff;
-      border-radius: 15px;
-      padding: 20px;
       margin: 20px auto;
-      width: 80%;
-      line-height: 1.8;
-      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
-      opacity: 0;
-      transform: translateY(-20px);
-      animation: fadeInSlide 0.8s forwards;
+      max-width: 500px;
+      background: white;
+      border: 2px solid #007bff;
+      border-radius: 10px;
+      padding: 20px;
+      animation: fadeIn 1s ease;
     }
-    #welcomeBox p {
-      margin-bottom: 15px;
-      font-size: 1.1rem;
-      color: #444;
-    }
-    #enterBtn {
-      background: #28a745;
+    #welcomeBox button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 1em;
+      background-color: #28a745;
       color: white;
       border: none;
-      padding: 10px 20px;
-      border-radius: 10px;
+      border-radius: 5px;
       cursor: pointer;
-      font-size: 1rem;
-      transition: background 0.3s ease;
     }
-    #enterBtn:active {
-      background: #34d058;
-      box-shadow: 0 0 10px #34d058;
+    #welcomeBox button:hover {
+      background-color: #1e7e34;
     }
-    @keyframes fadeInSlide {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    #mainContent {
+      display: none;
+      padding: 20px;
+    }
+    .track {
+      margin: 15px 0;
+      padding: 10px;
+      border: 1px solid #007bff;
+      border-radius: 8px;
+      background: #e9f5ff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .track button {
+      margin-left: 10px;
+      padding: 5px 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .track button:hover {
+      background: #0056b3;
+    }
+    .checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #28a745;
+      display: inline-block;
+      margin-left: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .checkbox.checked {
+      background-color: #28a745;
+      position: relative;
+    }
+    .checkbox.checked::after {
+      content: '✔';
+      color: white;
+      position: absolute;
+      top: -4px;
+      left: 2px;
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>😂❤️</h1>
-    <h2>ابعتها لمهجة</h2>
+    <h1>
+      ابعتها لمهجة 
+      <span class="emojis">😂❤️</span>
+    </h1>
   </header>
 
-  <main>
-    <h3>هاي تامر</h3>
-    <p>اكتب الكود هنا يا تامر:</p>
-    <input type="password" id="pin" placeholder="ادخل الكود">
+  <div id="pinContainer" class="pin-box">
+    <p>اكتب الكود هنا يا تامر</p>
+    <input type="password" id="pinInput" placeholder="PIN code">
     <button onclick="checkPin()">يلا أوبح</button>
+  </div>
 
-    <div id="welcomeBox">
-      <p>
-        بما إن مفيش تواصل بينا غير عن طريق مرسال ف انا عملت مرسال محدش يشوفه غيري انا وانت ،  
-        مش هنتكلم بس تقدر تبعتلي أغنية أو فويس نوت ..  
-        و ربنا يخليك لينا يا باشا ❤️
-      </p>
-      <button id="enterBtn" onclick="enterSite()">خش برجلك اليمين</button>
-    </div>
+  <div id="welcomeBox">
+    <p>بما إن مفيش تواصل بينا غير عن طريق مرسال ف انا عملت مرسال محدش يشوفه غيري انا وانت , مش هنتكلم بس تقدر تبعتلي أغنية أو فويس نوت .. و ربنا يخليك لينا يا باشا</p>
+    <button onclick="enterSite()">خش برجلك اليمين</button>
+  </div>
 
-    <div id="tracks" style="display:none; margin-top:20px;">
-      <h3>التراكات</h3>
-      <div id="trackList"></div>
-      <br>
-      <input type="file" id="upload" accept="audio/*">
-      <button onclick="uploadTrack()">ارفع تراك</button>
-    </div>
-  </main>
+  <div id="mainContent">
+    <h2>التراكات</h2>
+    <input type="file" id="fileUpload" accept="audio/*">
+    <button onclick="uploadTrack()">ارفع تراك</button>
+    <div id="trackList"></div>
+  </div>
 
   <script>
     const PIN = "10326";
-    let tracks = [];
-
     function checkPin() {
-      const pin = document.getElementById("pin").value;
+      const pin = document.getElementById("pinInput").value;
       if (pin === PIN) {
+        document.getElementById("pinContainer").style.display = "none";
         const box = document.getElementById("welcomeBox");
         box.style.display = "block";
-        // restart animation
         box.style.animation = "none";
         void box.offsetHeight;
         box.style.animation = null;
       } else {
-        alert("الكود غلط يا تامر!");
+        alert("الكود غلط يا تامر 😅");
       }
     }
 
     function enterSite() {
       document.getElementById("welcomeBox").style.display = "none";
-      document.getElementById("tracks").style.display = "block";
-    }
-
-    function renderTracks() {
-      const list = document.getElementById("trackList");
-      list.innerHTML = "";
-      tracks.forEach((track, index) => {
-        const trackDiv = document.createElement("div");
-        trackDiv.className = "track";
-
-        const checkbox = document.createElement("div");
-        checkbox.className = "checkbox";
-        checkbox.onclick = () => {
-          checkbox.classList.toggle("checked");
-          checkbox.textContent = checkbox.classList.contains("checked") ? "✔" : "";
-        };
-
-        const audio = document.createElement("audio");
-        audio.controls = true;
-        audio.src = track;
-
-        const downloadBtn = document.createElement("a");
-        downloadBtn.href = track;
-        downloadBtn.download = `track${index+1}.mp3`;
-        downloadBtn.innerHTML = '<button class="download-btn">نزلني</button>';
-
-        trackDiv.appendChild(checkbox);
-        trackDiv.appendChild(audio);
-        trackDiv.appendChild(downloadBtn);
-        list.appendChild(trackDiv);
-      });
+      document.getElementById("mainContent").style.display = "block";
     }
 
     function uploadTrack() {
-      const fileInput = document.getElementById("upload");
-      const file = fileInput.files[0];
-      if (file) {
-        const url = URL.createObjectURL(file);
-        tracks.push(url);
-        renderTracks();
+      const fileInput = document.getElementById("fileUpload");
+      if (fileInput.files.length === 0) {
+        alert("اختار تراك الأول يا معلم!");
+        return;
       }
+      const file = fileInput.files[0];
+      const trackList = document.getElementById("trackList");
+
+      const trackDiv = document.createElement("div");
+      trackDiv.className = "track";
+
+      const audio = document.createElement("audio");
+      audio.controls = true;
+      audio.src = URL.createObjectURL(file);
+
+      const downloadBtn = document.createElement("a");
+      downloadBtn.textContent = "نزلني";
+      downloadBtn.href = audio.src;
+      downloadBtn.download = file.name;
+      downloadBtn.className = "download-btn";
+
+      const checkbox = document.createElement("div");
+      checkbox.className = "checkbox";
+      checkbox.onclick = () => checkbox.classList.toggle("checked");
+
+      trackDiv.appendChild(audio);
+      trackDiv.appendChild(downloadBtn);
+      trackDiv.appendChild(checkbox);
+
+      trackList.appendChild(trackDiv);
+
+      fileInput.value = "";
     }
   </script>
 </body>
