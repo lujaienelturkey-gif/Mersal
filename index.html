@@ -1,232 +1,226 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ابعتها لمهجة</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>ابعتها لمهجة — خاص</title>
   <style>
-    :root{
-      --blue:#0b66ff;
-      --light:#f6fbff;
-      --green:#25c26b;
-      --card-shadow: 0 6px 18px rgba(11,102,255,0.08);
-    }
-    html,body{
-      height:100%;
-      margin:0;
-      font-family:Arial, "Noto Naskh Arabic", sans-serif;
-      background:var(--light);
-      color:#0b2447;
-    }
-    header{
-      background:linear-gradient(90deg,white 0%, #eaf3ff 100%);
-      border-bottom:1px solid rgba(11,102,255,0.06);
-      padding:20px 24px;
-      text-align:center;
-    }
-    .logo{
-      width:70px;
-      height:70px;
-      margin:0 auto 10px auto;
-      border-radius:50%;
-      background:var(--blue);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:white;
-      font-weight:700;
-      font-size:26px;
-      box-shadow:var(--card-shadow);
-    }
-    .subtitle{
-      font-family:"Comic Sans MS", cursive, sans-serif;
-      font-size:20px;
-      color:#205aa8;
-      margin-top:6px;
-    }
-    main{padding:20px;max-width:960px;margin:0 auto}
-    .card{background:white;border-radius:14px;padding:18px;box-shadow:var(--card-shadow);margin-bottom:18px}
-    .controls{display:flex;gap:12px;flex-wrap:wrap}
-    .btn{border:0;padding:12px 14px;border-radius:10px;cursor:pointer;font-weight:600}
-    .btn-primary{background:var(--blue);color:white}
+    :root{--blue:#0b66ff;--light:#f6fbff;--green:#25c26b;--card-shadow:0 6px 18px rgba(11,102,255,0.08)}
+    html,body{height:100%;margin:0;font-family:Arial, "Noto Naskh Arabic",sans-serif;background:var(--light);color:#0b2447}
+    header{background:linear-gradient(90deg,#fff 0%, #eaf3ff 100%);padding:18px;text-align:center;box-shadow:var(--card-shadow)}
+    .logo{width:70px;height:70px;margin:0 auto;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:26px}
+    .subtitle{font-family:"Comic Sans MS",cursive,sans-serif;font-size:20px;color:#205aa8;margin-top:10px}
+    main{max-width:980px;margin:18px auto;padding:12px}
+    .card{background:#fff;border-radius:12px;padding:14px;box-shadow:0 8px 20px rgba(11,102,255,0.06);margin-bottom:14px}
+    .input{width:100%;padding:10px;border-radius:8px;border:1px solid #e6eefc;box-sizing:border-box;margin-bottom:8px}
+    .btn{padding:10px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
+    .btn-primary{background:var(--blue);color:#fff}
     .btn-outline{background:transparent;border:1px solid rgba(11,102,255,0.12);color:var(--blue)}
-    #recordBtn.recording{background:#ff5252}
-    #recordStatus{font-weight:700;margin-right:6px}
-    .dropzone{margin-top:14px;border:2px dashed rgba(11,102,255,0.12);padding:18px;border-radius:12px;text-align:center;color:#1f4f9a}
-    input[type=file]{display:none}
-    .list{margin-top:16px}
-    .track{display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;border:1px solid rgba(11,102,255,0.04)}
-    .track + .track{margin-top:10px}
+    .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .dropzone{margin-top:10px;border:2px dashed rgba(11,102,255,0.12);padding:14px;border-radius:10px;text-align:center;color:#1f4f9a}
+    .track{display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;border:1px solid rgba(11,102,255,0.04);margin-top:10px}
     .track-info{flex:1}
-    .track-title{font-weight:700}
-    .track-meta{font-size:12px;color:#6a86b2}
-    .green-box{width:44px;height:44px;border-radius:8px;background:white;border:2px solid #ccc;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.1)}
-    .green-box.active{background:var(--green);color:white;border:2px solid var(--green)}
-    .download-btn{padding:6px 10px;background:var(--blue);color:white;border-radius:8px;font-size:14px;text-decoration:none}
-    footer{max-width:980px;margin:10px auto;color:#4b6fa3;text-align:center;font-size:13px}
-    /* PIN overlay */
-    .pin-overlay{position:fixed;inset:0;background:linear-gradient(180deg,rgba(11,102,255,0.07),rgba(11,102,255,0.12));display:flex;align-items:center;justify-content:center;z-index:9999}
-    .pin-box{background:white;padding:26px;border-radius:12px;box-shadow:0 16px 40px rgba(11,102,255,0.12);max-width:420px;width:94%;text-align:center}
-    .pin-box h2{margin:0 0 8px 0}
-    .pin-box p{margin:0 0 18px 0;color:#2b5aa8}
-    .pin-input{font-size:20px;padding:12px;border-radius:10px;border:1px solid #e6eefc;width:100%;box-sizing:border-box;text-align:center}
-    .pin-submit{margin-top:12px;padding:10px 14px;border-radius:10px;border:0;background:var(--blue);color:white;font-weight:700;cursor:pointer}
-    .pin-error{color:#c0392b;margin-top:10px;display:none}
+    .green-box{width:44px;height:44px;border-radius:8px;background:#fff;border:2px solid #ccc;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:700;cursor:pointer;font-size:18px}
+    .green-box.active{background:var(--green);color:#fff;border-color:var(--green)}
+    .download-btn{padding:6px 10px;background:var(--blue);color:#fff;border-radius:8px;font-size:14px;text-decoration:none;display:inline-flex;gap:6px;align-items:center}
+    .small-muted{font-size:13px;color:#5a789f}
   </style>
 </head>
 <body>
-  <!-- PIN -->
-  <div class="pin-overlay" id="pinOverlay" aria-hidden="false">
-    <div class="pin-box">
-      <h2>هاي تامر 😂❤️</h2>
-      <p>اكتب الكود هنا يا تامر</p>
-      <input id="pinInput" class="pin-input" inputmode="numeric" maxlength="6" placeholder="PIN" />
-      <button id="pinSubmit" class="pin-submit">يلا أوبح</button>
-      <div id="pinError" class="pin-error">الكود مش صح، جرّب تاني.</div>
-    </div>
-  </div>
-
   <header>
-    <div class="logo">M</div>
+    <div class="logo">م</div>
     <div class="subtitle">ابعتها لمهجة</div>
   </header>
 
   <main>
-    <section class="card">
-      <h3>حمل أغنية أو ابعت ڤويس نوت</h3>
-      <div class="controls">
-        <label class="btn btn-outline" for="fileInput">رفع ملف صوتي</label>
-        <input id="fileInput" type="file" accept="audio/*">
-        <button id="recordBtn" class="btn btn-primary">سجل ڤويس نوت</button>
-        <button id="stopBtn" class="btn btn-outline" disabled>إيقاف</button>
-        <div id="recordStatus"></div>
+    <!-- Auth card -->
+    <div id="authCard" class="card">
+      <h3>سجل دخول</h3>
+      <p class="small-muted">سجّل بإيميلك (هيبقى بس ليك ولتامر)</p>
+      <input id="email" class="input" type="email" placeholder="ايميل">
+      <input id="password" class="input" type="password" placeholder="باسورد">
+      <div style="display:flex;gap:8px">
+        <button id="loginBtn" class="btn btn-primary">دخول</button>
+        <button id="signupBtn" class="btn btn-outline">سجل (مرة)</button>
       </div>
-      <div class="dropzone" id="dropzone">اسحب أو اضغط "رفع ملف صوتي"</div>
-      <div class="list card" id="tracksList" style="margin-top:18px">
-        <h4 style="margin-top:0">قائمة التسجيلات</h4>
-        <div id="tracksContainer"></div>
+      <div id="authMsg" class="small-muted" style="color:#c0392b;margin-top:8px;display:none"></div>
+    </div>
+
+    <!-- App -->
+    <div id="app" class="card" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div id="who" class="small-muted"></div>
+        <div>
+          <button id="logoutBtn" class="btn btn-outline">خروج</button>
+        </div>
       </div>
-    </section>
+
+      <section>
+        <h4>حمل أغنية أو ابعت ڤويس نوت</h4>
+        <p class="small-muted">سجّل من الميكروفون أو ارفع ملف (mp3,wav,m4a)</p>
+
+        <div class="controls">
+          <label class="btn btn-outline" for="fileInput">رفع ملف صوتي</label>
+          <input id="fileInput" type="file" accept="audio/*" style="display:none">
+          <button id="recordBtn" class="btn btn-primary">سجل ڤويس نوت</button>
+          <button id="stopBtn" class="btn btn-outline" disabled>إيقاف</button>
+        </div>
+
+        <div id="dropzone" class="dropzone">اسحب وأسقط ملف هنا أو اضغط "رفع ملف صوتي"</div>
+
+        <div id="tracksList" style="margin-top:14px">
+          <h4>قائمة التسجيلات</h4>
+          <div id="tracksContainer"></div>
+        </div>
+      </section>
+    </div>
   </main>
 
-  <footer>تم بناء النموذج الأولي لـ <strong>ابعتها لمهجة</strong></footer>
-
+  <!-- Supabase client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script>
-    /* PIN logic */
-    (function(){
-      const PIN = '10326';
-      const overlay = document.getElementById('pinOverlay');
-      const input = document.getElementById('pinInput');
-      const submit = document.getElementById('pinSubmit');
-      const error = document.getElementById('pinError');
+    // --------- هنا حطي تفاصيل المشروع بتاعتك ----------
+    const SUPABASE_URL = "https://esdsowghlkzvhtciptzw.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzZHNvd2dobGt6dmh0Y2lwdHp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg3OTUyMDcsImV4cCI6MjA3NDM3MTIwN30.UbcxM3aPtxNclA5G865eFQrKbqR7JaR6vWfoc68INic";
+    // --------------------------------------------------
 
-      function unlock(){
-        overlay.style.display = 'none';
-        overlay.setAttribute('aria-hidden','true');
+    const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // DOM
+    const authCard = document.getElementById('authCard');
+    const appCard = document.getElementById('app');
+    const emailIn = document.getElementById('email');
+    const passIn = document.getElementById('password');
+    const loginBtn = document.getElementById('loginBtn');
+    const signupBtn = document.getElementById('signupBtn');
+    const authMsg = document.getElementById('authMsg');
+    const who = document.getElementById('who');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    const fileInput = document.getElementById('fileInput');
+    const dropzone = document.getElementById('dropzone');
+    const tracksContainer = document.getElementById('tracksContainer');
+    const recordBtn = document.getElementById('recordBtn');
+    const stopBtn = document.getElementById('stopBtn');
+
+    let mediaRecorder = null; let chunks = [];
+
+    // Auth handlers
+    loginBtn.addEventListener('click', async ()=>{
+      authMsg.style.display='none';
+      try{
+        const { error } = await supabase.auth.signInWithPassword({ email: emailIn.value.trim(), password: passIn.value.trim() });
+        if(error) throw error;
+      }catch(e){ authMsg.style.display='block'; authMsg.textContent = e.message || e; }
+    });
+
+    signupBtn.addEventListener('click', async ()=>{
+      authMsg.style.display='none';
+      try{
+        const { data, error } = await supabase.auth.signUp({ email: emailIn.value.trim(), password: passIn.value.trim() });
+        if(error) throw error;
+        authMsg.style.display='block'; authMsg.style.color='#2d7a2d'; authMsg.textContent = 'تم إرسال رابط التفعيل/إنشاء الحساب (راجع الإيميل)';
+      }catch(e){ authMsg.style.display='block'; authMsg.style.color='#c0392b'; authMsg.textContent = e.message || e; }
+    });
+
+    logoutBtn.addEventListener('click', async ()=>{ await supabase.auth.signOut(); });
+
+    // Auth state change
+    supabase.auth.onAuthStateChange((event, session) => {
+      const user = session?.user ?? null;
+      if(user){
+        authCard.style.display='none';
+        appCard.style.display='block';
+        who.innerHTML = `مسجل كـ <strong>${user.email}</strong>`;
+        startListening();
+      } else {
+        authCard.style.display='block';
+        appCard.style.display='none';
+        who.innerHTML = '';
+        stopListening();
       }
+    });
 
-      submit.addEventListener('click', ()=>{
-        const val = input.value.trim();
-        if(val === PIN) unlock(); else { error.style.display='block'; }
+    // --- Upload ---
+    fileInput.addEventListener('change', (e)=>{ const f = e.target.files[0]; if(f) uploadFile(f); fileInput.value=''; });
+    ['dragenter','dragover'].forEach(ev=> dropzone.addEventListener(ev, e=>{ e.preventDefault(); dropzone.style.borderColor='rgba(11,102,255,0.4)'; }));
+    ['dragleave','drop'].forEach(ev=> dropzone.addEventListener(ev, e=>{ e.preventDefault(); dropzone.style.borderColor='rgba(11,102,255,0.12)'; }));
+    dropzone.addEventListener('drop', (e)=>{ e.preventDefault(); const f = e.dataTransfer.files[0]; if(f) uploadFile(f); });
+
+    async function uploadFile(file){
+      const user = supabase.auth.getUser ? (await supabase.auth.getUser()).data.user : null;
+      if(!user){ alert('لازم تسجل دلوقتي'); return; }
+      const filename = `${Date.now()}_${file.name}`;
+      const path = `tracks/${filename}`;
+      // 1) upload to storage (bucket name assumed 'tracks' at project)
+      const { error: upErr } = await supabase.storage.from('tracks').upload(path, file, { cacheControl: '3600', upsert: false });
+      if(upErr){ alert('خطأ في الرفع: '+upErr.message); return; }
+      // 2) get public URL (if bucket public) or use to create signed url later
+      const { data: publicData } = supabase.storage.from('tracks').getPublicUrl(path);
+      const url = publicData.publicUrl;
+      // 3) insert metadata in table
+      const { error: insErr } = await supabase.from('tracks').insert({
+        filename: file.name,
+        url,
+        created_at: new Date().toISOString()
       });
-      input.addEventListener('keydown',(e)=>{if(e.key==='Enter') submit.click();});
-    })();
-
-    const fileInput=document.getElementById('fileInput');
-    const dropzone=document.getElementById('dropzone');
-    const tracksContainer=document.getElementById('tracksContainer');
-    const recordBtn=document.getElementById('recordBtn');
-    const stopBtn=document.getElementById('stopBtn');
-    const recordStatus=document.getElementById('recordStatus');
-
-    let mediaRecorder=null; let chunks=[];
-
-    function addTrack(blob,name){
-      const url=URL.createObjectURL(blob);
-      const track=document.createElement('div');
-      track.className='track';
-
-      const greenBox=document.createElement('div');
-      greenBox.className='green-box';
-      greenBox.innerHTML='✓';
-      greenBox.addEventListener('click',()=>{
-        greenBox.classList.toggle('active');
-      });
-
-      const info=document.createElement('div');
-      info.className='track-info';
-      const title=document.createElement('div');
-      title.className='track-title';
-      title.textContent=name||'تسجيل جديد';
-      const meta=document.createElement('div');
-      meta.className='track-meta';
-      const audio=document.createElement('audio');
-      audio.controls=true;
-      audio.src=url;
-      const download=document.createElement('a');
-      download.href=url;
-      download.download=name||'track';
-      download.className='download-btn';
-      download.textContent='⬇️ نزلني';
-      meta.appendChild(audio);
-      meta.appendChild(download);
-
-      info.appendChild(title);
-      info.appendChild(meta);
-
-      track.appendChild(greenBox);
-      track.appendChild(info);
-      tracksContainer.prepend(track);
+      if(insErr){ alert('خطأ في حفظ البيانات: '+insErr.message); }
     }
 
-    fileInput.addEventListener('change',(e)=>{
-      const f=e.target.files[0];
-      if(!f) return;
-      addTrack(f,f.name);
-      fileInput.value='';
-    });
+    // --- Listen & render tracks (polling simplified) ---
+    let listenTimer = null;
+    async function loadTracks(){
+      const { data, error } = await supabase.from('tracks').select('*').order('created_at', { ascending: false }).limit(200);
+      if(error){ console.error(error); return; }
+      tracksContainer.innerHTML = '';
+      data.forEach(row => renderTrack(row));
+    }
+    function startListening(){ loadTracks(); if(listenTimer) clearInterval(listenTimer); listenTimer = setInterval(loadTracks, 3000); }
+    function stopListening(){ if(listenTimer) clearInterval(listenTimer); tracksContainer.innerHTML=''; }
 
-    ['dragenter','dragover'].forEach(ev=>{
-      dropzone.addEventListener(ev,(e)=>{e.preventDefault();dropzone.style.borderColor='rgba(11,102,255,0.4)'});
-    });
-    ['dragleave','drop'].forEach(ev=>{
-      dropzone.addEventListener(ev,(e)=>{e.preventDefault();dropzone.style.borderColor='rgba(11,102,255,0.12)'});
-    });
-    dropzone.addEventListener('drop',(e)=>{
-      const f=e.dataTransfer.files[0];
-      if(f) addTrack(f,f.name);
-    });
+    function renderTrack(row){
+      const track = document.createElement('div'); track.className='track';
+      const greenBox = document.createElement('div'); greenBox.className='green-box'; greenBox.textContent = row.selected ? '✓' : '';
+      if(row.selected) greenBox.classList.add('active');
+      greenBox.addEventListener('click', async ()=>{
+        const newVal = !row.selected;
+        const { error } = await supabase.from('tracks').update({ selected: newVal }).eq('id', row.id);
+        if(!error){ row.selected = newVal; greenBox.classList.toggle('active'); greenBox.textContent = newVal ? '✓' : ''; }
+      });
 
-    recordBtn.addEventListener('click',async ()=>{
-      if(mediaRecorder&&mediaRecorder.state==='recording') return;
+      const info = document.createElement('div'); info.className='track-info';
+      const title = document.createElement('div'); title.textContent = row.filename || 'تراك';
+      const meta = document.createElement('div'); meta.className='track-meta';
+      const audio = document.createElement('audio'); audio.controls = true; audio.src = row.url;
+      const download = document.createElement('a'); download.className='download-btn'; download.href = row.url; download.download = row.filename || 'track'; download.textContent = '⬇️ نزلني';
+      meta.appendChild(audio); meta.appendChild(download);
+      info.appendChild(title); info.appendChild(meta);
+
+      track.appendChild(greenBox); track.appendChild(info);
+      tracksContainer.appendChild(track);
+    }
+
+    // --- Recording ---
+    recordBtn.addEventListener('click', async ()=>{
+      if(mediaRecorder && mediaRecorder.state==='recording') return;
       try{
-        const stream=await navigator.mediaDevices.getUserMedia({audio:true});
-        mediaRecorder=new MediaRecorder(stream);
-        chunks=[];
-        mediaRecorder.ondataavailable=e=>chunks.push(e.data);
-        mediaRecorder.onstart=()=>{
-          recordBtn.classList.add('recording');
-          recordBtn.textContent='جاري التسجيل...';
-          stopBtn.disabled=false;
-          recordStatus.textContent='● تسجيل';
-        }
-        mediaRecorder.onstop=()=>{
-          recordBtn.classList.remove('recording');
-          recordBtn.textContent='سجل ڤويس نوت';
-          stopBtn.disabled=true;
-          recordStatus.textContent='';
-          const blob=new Blob(chunks,{type:'audio/webm'});
-          addTrack(blob,'ڤويس نوت - '+new Date().toLocaleString());
-        }
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        chunks = [];
+        mediaRecorder.ondataavailable = e => chunks.push(e.data);
+        mediaRecorder.onstart = ()=>{ recordBtn.textContent='جاري التسجيل...'; stopBtn.disabled=false; };
+        mediaRecorder.onstop = async ()=>{ recordBtn.textContent='سجل ڤويس نوت'; stopBtn.disabled=true;
+          const blob = new Blob(chunks, { type: 'audio/webm' });
+          const filename = 'ڤويس نوت - ' + new Date().toLocaleString() + '.webm';
+          await uploadFile(new File([blob], filename, { type: 'audio/webm' }));
+        };
         mediaRecorder.start();
-      }catch(err){
-        alert('مش قادر ياخد إذن الميكروفون.');
-      }
+      }catch(err){ alert('مفيش إذن للميكروفون'); }
     });
+    stopBtn.addEventListener('click', ()=>{ if(mediaRecorder && mediaRecorder.state==='recording') mediaRecorder.stop(); });
 
-    stopBtn.addEventListener('click',()=>{
-      if(mediaRecorder&&mediaRecorder.state==='recording') mediaRecorder.stop();
-    });
+    // If page served from local file, auto-skip auth display if user already logged (session preserved in browser)
+    (async ()=>{ const { data } = await supabase.auth.getSession(); if(data?.session) { /* onAuthStateChange will handle */ } })();
   </script>
 </body>
 </html>
