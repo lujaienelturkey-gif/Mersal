@@ -44,7 +44,6 @@ main{padding:20px;max-width:600px;margin:auto}
 </head>
 <body>
 
-<!-- شاشة الكود -->
 <div class="pin-overlay" id="pinOverlay">
   <div class="pin-box">
     <h2>هاي تامر 😂❤️</h2>
@@ -55,10 +54,9 @@ main{padding:20px;max-width:600px;margin:auto}
   </div>
 </div>
 
-<!-- شاشة الترحيب -->
 <div id="welcomeOverlay">
   <div id="welcomeBox">
-    <p>بما إن مفيش تواصل بينا غير عن طريق مرسال ف انا عملت مرسال محدش يشوفه غيري انا وانت , مش هنتكلم بس تقدر تبعتلي أغنية أو فويس نوت .. و ربنا يخليك لينا يا باشا 😂❤️</p>
+    <p>بما إن مفيش تواصل بينا غير عن طريق مرسال ف انا عملت مرسال محدش يشوفه غيري انا وانت , مش هنتكلم بس هنبعت لبعض اغاني أو فويس نوت .. و ربنا يخليك لينا يا باشا 😂❤️</p>
     <button id="enterBtn">يلا أوبح</button>
   </div>
 </div>
@@ -90,7 +88,6 @@ const uploadBtn = document.getElementById('uploadBtn')
 const spinner = document.getElementById('spinner')
 const tracksList = document.getElementById('tracksList')
 
-// تحميل التراكات وحالة المربع الأخضر
 async function loadTracks(){
   const { data: files, error } = await supabase.storage.from(bucketName).list()
   tracksList.innerHTML = ""
@@ -135,7 +132,6 @@ uploadBtn.addEventListener('click', async ()=>{
 
 loadTracks()
 
-// PIN logic + الترحيب
 const PIN = "10326"
 const pinOverlay = document.getElementById('pinOverlay')
 const pinInput = document.getElementById('pinInput')
@@ -144,15 +140,15 @@ const pinError = document.getElementById('pinError')
 const welcomeOverlay = document.getElementById('welcomeOverlay')
 const enterBtn = document.getElementById('enterBtn')
 
-pinSubmit.addEventListener('click', ()=>{
-  if(pinInput.value.trim()===PIN){
-    pinOverlay.style.display="none"
-    welcomeOverlay.style.display="flex"
-  } else { pinError.style.display="block" }
+pinSubmit.addEventListener('click',()=>{
+  if(pinInput.value===PIN){
+    pinOverlay.style.display='none'
+    welcomeOverlay.style.display='flex'
+  }else pinError.style.display='block'
 })
 
-enterBtn.addEventListener('click', ()=>{
-  welcomeOverlay.style.display="none"
+enterBtn.addEventListener('click',()=>{
+  welcomeOverlay.style.display='none'
 })
 </script>
 
