@@ -61,7 +61,7 @@ footer{max-width:980px;margin:10px auto;color:#4b6fa3;text-align:center;font-siz
 
 <div class="message-overlay" id="messageOverlay">
   <div class="message-box">
-    <p>بما إن مفيش تواصل بينا غير عن طريق مرسال >> ف انا عملت مرسال محدش يشوفه غيري انا وانت , مش هنتكلم بس تقدر تبعتلي أغنية أو فويس نوت .. و ربنا يخليك لينا يا باشا</p>
+    <p>بما إن مفيش تواصل بينا غير عن طريق مرسال .. ف انا عملت مرسال محدش يشوفه غيري انا وانت , مش هنتكلم بس تقدر تبعتلي أغنية أو فويس نوت .. و ربنا يخليك لينا يا باشا</p>
     <button id="enterBtn" class="btn btn-primary">يلا أوبح</button>
   </div>
 </div>
@@ -89,7 +89,7 @@ footer{max-width:980px;margin:10px auto;color:#4b6fa3;text-align:center;font-siz
   </section>
 </main>
 
-<footer>🦦❤️</footer>
+<footer>🦦❤️❤️</footer>
 
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
@@ -181,7 +181,7 @@ async function uploadTrack(file){
   if(uploadError){console.error('Error uploading:',uploadError);return}
   const { publicURL, error: urlError } = supabase.storage.from('tracks').getPublicUrl(filePath)
   if(urlError){console.error('Error getting URL:',urlError);return}
-  const { error: dbError } = await supabase.from('tracks').insert([{file_name:file.name,file_url:publicURL}])
+  const { error: dbError } = await supabase.from('tracks').insert([{file_name:file.name,file_url:publicURL,file_selected:false}])
   if(dbError){console.error('Error inserting DB:',dbError);return}
   loadTracks()
 }
