@@ -78,7 +78,7 @@ footer {
 
 <div id="welcomeOverlay">
   <div id="welcomeBox">
-    <p>بما إن مفيش تواصل بينا غير عن طريق مرسال .. ف انا عملت مرسال محدش يشوفه غيري انا وانت , مش هنتكلم بس تقدر تبعتلي أغنية أو فويس نوت .. و ربنا يخليك لينا يا باشا 😂❤️</p>
+    <p>بما إن مفيش تواصل بينا غير عن طريق مرسال .. ف انا عملت مرسال محدش يشوفه غيري انا وانت , مش هنتكلم بس تقدر تبعتلي أغنية .. اتفضل يا طه 😂❤️</p>
     <button id="enterBtn">يلا أوبح</button>
   </div>
 </div>
@@ -90,7 +90,7 @@ footer {
 
 <main>
   <section class="card">
-    <h3>ابعت ڤويس نوت أو أغنية</h3>
+    <h3>ابعت أغنية تحلي السكوت</h3>
     <input type="file" id="fileInput" accept="audio/*">
     <button class="btn btn-primary" id="uploadBtn">Upload <div id="spinner"></div></button>
     <div id="tracksList"></div>
@@ -118,7 +118,16 @@ async function loadTracks(){
   const { data: files, error } = await supabase.storage.from(bucketName).list()
   tracksList.innerHTML = ""
   if(error) return console.error(error)
-  const { data: selections } = await supabase.from('track_selections').select('*')
+
+  // استرجاع حالات التحديد المحفوظة من جدول 'track_selections'
+  const { data: selections, error: selectionsError } = await supabase.from('track_selections').select('*')
+  if(selectionsError) {
+    console.error("Error fetching selections:", selectionsError);
+    return;
+  }
+  const selectionMap = new Map(selections.map(s => [s.file_name, s.selected]));
+
+
   for(const file of files){
     const { data: urlData } = supabase.storage.from(bucketName).getPublicUrl(file.name)
     const url = urlData.publicUrl
@@ -132,13 +141,26 @@ async function loadTracks(){
       </div>
     `
     const box = trackDiv.querySelector('.green-box')
-    const selected = selections.find(s=>s.file_name===file.name)?.selected
-    if(selected){ box.classList.add('active'); box.innerHTML='✓' }
+    // التحقق من الحالة المحفوظة وتطبيقها
+    const selected = selectionMap.get(file.name);
+    if(selected){
+      box.classList.add('active');
+      box.innerHTML='✓';
+    }
+
     box.addEventListener('click', async ()=>{
       const newState = !box.classList.contains('active')
       box.classList.toggle('active', newState)
       box.innerHTML = newState?'✓':''
-      await supabase.from('track_selections').upsert({ file_name:file.name, selected:newState })
+
+      // حفظ الحالة الجديدة في قاعدة البيانات
+      const { error: upsertError } = await supabase
+        .from('track_selections')
+        .upsert({ file_name: file.name, selected: newState }, { onConflict: 'file_name' });
+
+      if (upsertError) {
+        console.error("Error updating selection state:", upsertError);
+      }
     })
     tracksList.appendChild(trackDiv)
   }
