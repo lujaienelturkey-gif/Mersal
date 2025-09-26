@@ -5,213 +5,142 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ابعتها لمهجة</title>
   <style>
-    :root {
-      --blue: #0b66ff;
-      --light: #f6fbff;
-      --green: #25c26b;
-      --card-shadow: 0 6px 18px rgba(11,102,255,0.08);
-    }
-    html,body{height:100%;margin:0;font-family:Arial, "Noto Naskh Arabic", sans-serif;background:var(--light);color:#0b2447}
-    header{text-align:center;padding:20px;}
-    .logo {font-size:40px;font-weight:bold;}
-    .brand-title {font-family:Comic Sans MS, cursive;font-size:24px;margin-top:6px;}
-    main{padding:28px;max-width:980px;margin:20px auto}
-    .card{background:white;border-radius:14px;padding:18px;box-shadow:var(--card-shadow);margin-bottom:18px}
-    .controls{display:flex;gap:12px;flex-wrap:wrap}
-    .btn{border:0;padding:12px 14px;border-radius:10px;cursor:pointer;font-weight:600}
-    .btn-primary{background:var(--blue);color:white}
-    .btn-outline{background:transparent;border:1px solid rgba(11,102,255,0.12);color:var(--blue)}
-    #recordBtn.recording{background:#ff5252}
-    #recordStatus{font-weight:700;margin-right:6px}
-    .dropzone{margin-top:14px;border:2px dashed rgba(11,102,255,0.12);padding:18px;border-radius:12px;text-align:center;color:#1f4f9a}
-    input[type=file]{display:none}
-    .list{margin-top:16px}
-    .track{display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;border:1px solid rgba(11,102,255,0.04)}
-    .track + .track{margin-top:10px}
-    .track-info{flex:1}
-    .track-title{font-weight:700}
-    .track-meta{font-size:12px;color:#6a86b2;display:flex;gap:8px;align-items:center;}
-    .green-box{width:44px;height:44px;border-radius:8px;background:transparent;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;cursor:pointer;box-shadow:0 6px 14px rgba(37,194,107,0.18);transition:0.2s;}
-    .green-box.selected{background:var(--green);color:white;transform:scale(0.95);}
-    .pin-overlay,.message-overlay{position:fixed;inset:0;background:linear-gradient(180deg,rgba(11,102,255,0.07),rgba(11,102,255,0.12));display:flex;align-items:center;justify-content:center;z-index:9999}
-    .pin-box,.message-box{background:white;padding:26px;border-radius:12px;box-shadow:0 16px 40px rgba(11,102,255,0.12);max-width:420px;width:94%;text-align:center}
-    .pin-box h2,.message-box h2{margin:0 0 8px 0}
-    .pin-box p,.message-box p{margin:0 0 18px 0;color:#2b5aa8}
-    .pin-input{font-size:20px;padding:12px;border-radius:10px;border:1px solid #e6eefc;width:100%;box-sizing:border-box;text-align:center}
-    .pin-submit,.enter-btn{margin-top:12px;padding:10px 14px;border-radius:10px;border:0;background:var(--blue);color:white;font-weight:700;cursor:pointer}
+    body{margin:0;font-family:Arial, sans-serif;background:#f6fbff}
+    .btn{padding:10px 16px;border:0;border-radius:8px;cursor:pointer;font-weight:bold}
+    .btn-primary{background:#0b66ff;color:#fff}
+    .btn-outline{background:#fff;border:1px solid #0b66ff;color:#0b66ff}
+    .overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3);z-index:9999}
+    .box{background:#fff;padding:20px;border-radius:10px;max-width:400px;text-align:center}
+    .track{display:flex;align-items:center;gap:10px;margin:10px 0;padding:10px;border:1px solid #eee;border-radius:8px}
+    .green-box{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:6px;background:#ddd;cursor:pointer}
+    .green-box.selected{background:#25c26b;color:#fff;font-weight:bold}
   </style>
 </head>
 <body>
 
-<div class="pin-overlay" id="pinOverlay">
-  <div class="pin-box">
-    <h2>هاي تامر 😂❤️</h2>
+<!-- شاشة الـ PIN -->
+<div class="overlay" id="pinOverlay">
+  <div class="box">
+    <h3>هاي تامر 😂❤️</h3>
     <p>اكتب الكود هنا يا عسل</p>
-    <input id="pinInput" class="pin-input" maxlength="6" placeholder="أدخل الـ PIN">
-    <button id="pinSubmit" class="pin-submit">خش برجلك اليمين</button>
-    <div id="pinError" style="color:red;display:none;margin-top:10px;">الكود مش صح، جرّب تاني.</div>
+    <input id="pinInput" maxlength="6" style="padding:8px;text-align:center;font-size:18px">
+    <div>
+      <button class="btn btn-primary" id="pinSubmit">خش برجلك اليمين</button>
+    </div>
+    <p id="pinError" style="color:red;display:none">الكود مش صح، جرّب تاني</p>
   </div>
 </div>
 
-<div class="message-overlay" id="messageOverlay" style="display:none">
-  <div class="message-box">
+<!-- الرسالة -->
+<div class="overlay" id="messageOverlay" style="display:none">
+  <div class="box">
     <p>بما إن مفيش تواصل بينا غير عن طريق مرسال .. ف انا عملت مرسال محدش يشوفه غيري انا وانت , مش هنتكلم بس تقدر تبعتلي أغنية أو فويس نوت .. و ربنا يخليك لينا يا باشا</p>
-    <button id="enterBtn" class="enter-btn">يلا أوبح</button>
+    <button class="btn btn-primary" id="enterBtn">يلا أوبح</button>
   </div>
 </div>
 
-<header>
-  <div class="logo">🎵</div>
-  <div class="brand-title">ابعتها لمهجة</div>
-</header>
+<main style="padding:20px;max-width:800px;margin:auto">
+  <h2>📥 ارفع أغنية أو سجل ڤويس نوت</h2>
+  <input type="file" id="fileInput" accept="audio/*" style="margin:10px 0">
+  <button class="btn btn-outline" id="recordBtn">🎤 سجل ڤويس</button>
+  <button class="btn btn-outline" id="stopBtn" disabled>⏹ إيقاف</button>
+  <div id="status"></div>
 
-  <footer>🦦❤️</footer>
-  
-<main>
-  <section class="card">
-    <h3>حمل أغنية أو ابعت ڤويس نوت</h3>
-    <div class="controls">
-      <label class="btn btn-outline" for="fileInput">رفع ملف صوتي</label>
-      <input id="fileInput" type="file" accept="audio/*">
-      <button id="recordBtn" class="btn btn-primary">سجل ڤويس نوت</button>
-      <button id="stopBtn" class="btn btn-outline" disabled>إيقاف</button>
-      <div id="recordStatus"></div>
-    </div>
-    <div class="dropzone" id="dropzone">اضغط "رفع ملف صوتي"</div>
-    <div class="list card" id="tracksList">
-      <h4 style="margin-top:0">قائمة التسجيلات</h4>
-      <div id="tracksContainer"></div>
-    </div>
-  </section>
+  <h3>🎶 التراكات</h3>
+  <div id="tracksContainer"></div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL = 'https://esdsowghlkzvhtciptzw.supabase.co'
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzZHNvd2dobGt6dmh0Y2lwdHp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg3OTUyMDcsImV4cCI6MjA3NDM3MTIwN30.UbcxM3aPtxNclA5G865eFQrKbqR7JaR6vWfoc68INic'
-const supabase = supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY)
+const SUPABASE_URL = "https://esdsowghlkzvhtciptzw.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzZHNvd2dobGt6dmh0Y2lwdHp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg3OTUyMDcsImV4cCI6MjA3NDM3MTIwN30.UbcxM3aPtxNclA5G865eFQrKbqR7JaR6vWfoc68INic";
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const pinOverlay = document.getElementById('pinOverlay')
-const pinInput = document.getElementById('pinInput')
-const pinSubmit = document.getElementById('pinSubmit')
-const pinError = document.getElementById('pinError')
-const messageOverlay = document.getElementById('messageOverlay')
-const enterBtn = document.getElementById('enterBtn')
-const tracksContainer = document.getElementById('tracksContainer')
-const fileInput = document.getElementById('fileInput')
-const dropzone = document.getElementById('dropzone')
-const recordBtn = document.getElementById('recordBtn')
-const stopBtn = document.getElementById('stopBtn')
-const recordStatus = document.getElementById('recordStatus')
+// عناصر الواجهة
+const pinOverlay = document.getElementById("pinOverlay");
+const pinInput = document.getElementById("pinInput");
+const pinSubmit = document.getElementById("pinSubmit");
+const pinError = document.getElementById("pinError");
+const messageOverlay = document.getElementById("messageOverlay");
+const enterBtn = document.getElementById("enterBtn");
+const tracksContainer = document.getElementById("tracksContainer");
+const fileInput = document.getElementById("fileInput");
+const recordBtn = document.getElementById("recordBtn");
+const stopBtn = document.getElementById("stopBtn");
+const statusDiv = document.getElementById("status");
 
-let mediaRecorder=null; let chunks=[]
+const PIN = "10326";
+let mediaRecorder, chunks=[];
 
-const PIN='10326'
-
-pinSubmit.addEventListener('click', ()=>{
+// تحقق من الـ PIN
+pinSubmit.addEventListener("click", ()=>{
   if(pinInput.value.trim()===PIN){
-    pinOverlay.style.display='none'
-    messageOverlay.style.display='flex'
-  } else { pinError.style.display='block' }
-})
+    pinOverlay.style.display="none";
+    messageOverlay.style.display="flex";
+  } else {
+    pinError.style.display="block";
+  }
+});
+enterBtn.addEventListener("click", ()=> messageOverlay.style.display="none");
 
-enterBtn.addEventListener('click', ()=>{ messageOverlay.style.display='none'; loadTracks() })
-
+// تحميل التراكات
 async function loadTracks(){
-  tracksContainer.innerHTML=''
-  const { data, error } = await supabase.from('tracks').select('*').order('id',{ascending:false})
-  if(error){console.error(error); return}
+  tracksContainer.innerHTML="";
+  let { data, error } = await supabase.from("tracks").select("*").order("id",{ascending:false});
+  if(error){ console.error(error); return }
   data.forEach(track=>{
-    const div=document.createElement('div')
-    div.className='track'
-
-    const greenBox=document.createElement('div')
-    greenBox.className='green-box'+(track.selected?' selected':'')
-    greenBox.textContent=track.selected?'✓':''
-    greenBox.addEventListener('click', async ()=>{
-      const newSelected=!track.selected
-      const { error } = await supabase.from('tracks').update({selected:newSelected}).eq('id',track.id)
-      if(error){console.error(error); return}
-      greenBox.classList.toggle('selected')
-      greenBox.textContent=newSelected?'✓':''
-      track.selected=newSelected
-    })
-
-    const info=document.createElement('div')
-    info.className='track-info'
-    const title=document.createElement('div')
-    title.className='track-title'
-    title.textContent=track.file_name
-    const meta=document.createElement('div')
-    meta.className='track-meta'
-    const audio=document.createElement('audio')
-    audio.controls=true
-    audio.src=track.file_url
-    meta.appendChild(audio)
-    const downloadBtn=document.createElement('a')
-    downloadBtn.href=track.file_url
-    downloadBtn.textContent='نزلني'
-    downloadBtn.className='btn btn-outline'
-    downloadBtn.download=track.file_name
-    meta.appendChild(downloadBtn)
-
-    info.appendChild(title)
-    info.appendChild(meta)
-    div.appendChild(greenBox)
-    div.appendChild(info)
-    tracksContainer.appendChild(div)
-  })
+    const div=document.createElement("div");
+    div.className="track";
+    const box=document.createElement("div");
+    box.className="green-box"+(track.selected?" selected":"");
+    box.textContent=track.selected?"✓":"";
+    box.addEventListener("click", async ()=>{
+      let { error } = await supabase.from("tracks").update({selected:!track.selected}).eq("id",track.id);
+      if(!error){ loadTracks() }
+    });
+    const info=document.createElement("div");
+    info.innerHTML=`<b>${track.file_name}</b><br><audio controls src="${track.file_url}"></audio>
+      <a href="${track.file_url}" download>⬇️ نزلني</a>`;
+    div.appendChild(box);
+    div.appendChild(info);
+    tracksContainer.appendChild(div);
+  });
 }
 
+// رفع ملف
 async function uploadTrack(file){
-  const filePath=`${Date.now()}_${file.name}`
-  const { data, error: uploadError } = await supabase.storage.from('tracks').upload(filePath, file)
-  if(uploadError){console.error('Error uploading:',uploadError); alert('حدث خطأ أثناء رفع الملف'); return}
-  const { publicURL, error: urlError } = supabase.storage.from('tracks').getPublicUrl(filePath)
-  if(urlError){console.error('Error getting URL:',urlError); return}
-  const { error: dbError } = await supabase.from('tracks').insert([{file_name:file.name,file_url:publicURL,selected:false}])
-  if(dbError){console.error('Error inserting DB:',dbError); return}
-  loadTracks()
+  const path=Date.now()+"_"+file.name;
+  let { error:uploadError } = await supabase.storage.from("tracks").upload(path,file);
+  if(uploadError){ alert("خطأ في الرفع"); return }
+  let { data } = supabase.storage.from("tracks").getPublicUrl(path);
+  await supabase.from("tracks").insert([{file_name:file.name,file_url:data.publicUrl,selected:false}]);
+  loadTracks();
 }
+fileInput.addEventListener("change", e=>{
+  if(e.target.files[0]) uploadTrack(e.target.files[0]);
+});
 
-fileInput.addEventListener('change', e=>{
-  const f = e.target.files[0]
-  if(f) uploadTrack(f)
-})
-
-['dragenter','dragover'].forEach(ev=>{dropzone.addEventListener(ev,e=>{e.preventDefault();dropzone.style.borderColor='rgba(11,102,255,0.4)'})})
-['dragleave','drop'].forEach(ev=>{dropzone.addEventListener(ev,e=>{e.preventDefault();dropzone.style.borderColor='rgba(11,102,255,0.12)'})})
-dropzone.addEventListener('drop', e=>{
-  const f = e.dataTransfer.files[0]
-  if(f) uploadTrack(f)
-})
-
-recordBtn.addEventListener('click', async ()=>{
-  if(mediaRecorder && mediaRecorder.state==='recording') return
-  try{
-    const stream = await navigator.mediaDevices.getUserMedia({audio:true})
-    mediaRecorder=new MediaRecorder(stream)
-    chunks=[]
-    mediaRecorder.ondataavailable=e=>chunks.push(e.data)
-    mediaRecorder.onstart=()=>{
-      recordBtn.classList.add('recording')
-      recordBtn.textContent='جاري التسجيل...'
-      stopBtn.disabled=false
-      recordStatus.textContent='● تسجيل'
-    }
-    mediaRecorder.onstop=()=>{
-      recordBtn.classList.remove('recording')
-      recordBtn.textContent='سجل ڤويس نوت'
-      stopBtn.disabled=true
-      recordStatus.textContent=''
-      const blob=new Blob(chunks,{type:'audio/webm'})
-      uploadTrack(blob)
-    }
-    mediaRecorder.start()
-  }catch(err){alert('لم نتمكن من الوصول إلى الميكروفون. تأكد من السماح بالإذن.')}
-})
-stopBtn.addEventListener('click', ()=>{if(mediaRecorder && mediaRecorder.state==='recording') mediaRecorder.stop()})
+// تسجيل فويس
+recordBtn.addEventListener("click", async ()=>{
+  let stream=await navigator.mediaDevices.getUserMedia({audio:true});
+  mediaRecorder=new MediaRecorder(stream);
+  chunks=[];
+  mediaRecorder.ondataavailable=e=>chunks.push(e.data);
+  mediaRecorder.onstop=()=>{
+    const blob=new Blob(chunks,{type:"audio/webm"});
+    const file=new File([blob],"voice.webm",{type:"audio/webm"});
+    uploadTrack(file);
+    statusDiv.textContent="";
+  };
+  mediaRecorder.start();
+  recordBtn.disabled=true; stopBtn.disabled=false;
+  statusDiv.textContent="● جاري التسجيل...";
+});
+stopBtn.addEventListener("click", ()=>{
+  mediaRecorder.stop();
+  recordBtn.disabled=false; stopBtn.disabled=true;
+});
+loadTracks();
 </script>
 </body>
 </html>
-
