@@ -44,14 +44,16 @@ footer{max-width:980px;margin:10px auto;color:#4b6fa3;text-align:center;font-siz
 </head>
 <body>
 
-<div class="pin-overlay" id="pinOverlay">
-  <div class="pin-box">
-    <h2>😂❤️ هاي تامر</h2>
-    <input id="pinInput" class="pin-input" inputmode="numeric" maxlength="6" placeholder="أدخل PIN">
+  <div class="pin-overlay" id="pinOverlay" aria-hidden="false">
+  <div class="pin-box" role="dialog" aria-labelledby="pinTitle">
+    <h2 id="pinTitle">هاي تامر 😂❤️</h2>
+    <p>اكتب الكود هنا يا عسل</p>
+    <input id="pinInput" class="pin-input" inputmode="numeric" maxlength="6" placeholder="أدخل الـ PIN" aria-label="رمز اليلا أوبح">
     <button id="pinSubmit" class="pin-submit">خش برجلك اليمين</button>
     <div id="pinError" class="pin-error">الكود مش صح، جرّب تاني.</div>
   </div>
 </div>
+
 
 <div class="msg-overlay" id="msgOverlay" style="display:none">
   <div class="msg-box">
@@ -198,3 +200,4 @@ stopBtn.addEventListener('click', ()=>{ if(mediaRecorder && mediaRecorder.state=
 </script>
 </body>
 </html>
+
