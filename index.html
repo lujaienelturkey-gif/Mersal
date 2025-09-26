@@ -58,6 +58,53 @@ const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // عناصر الواجهة
 const pinOverlay = document.getElementById("pinOverlay");
+  <script>
+(function(){
+  const PIN = '10326';
+
+  function bindPinAndEnter() {
+    const pinOverlay = document.getElementById('pinOverlay');
+    const pinInput = document.getElementById('pinInput');
+    const pinSubmit = document.getElementById('pinSubmit');
+    const pinError = document.getElementById('pinError');
+    const enterBtn = document.getElementById('enterBtn') || document.getElementById('enterSiteBtn') || document.getElementById('msgBtn') || document.querySelector('.enter-btn');
+    const messageOverlay = document.getElementById('messageOverlay') || document.getElementById('msgOverlay') || document.getElementById('welcomeOverlay');
+
+    if(!pinOverlay || !pinInput || !pinSubmit){
+      setTimeout(bindPinAndEnter, 150);
+      return;
+    }
+
+    pinSubmit.addEventListener('click', function(){
+      if(pinInput.value.trim() === PIN){
+        if(pinError) pinError.style.display = 'none';
+        pinOverlay.style.display = 'none';
+        if(messageOverlay) messageOverlay.style.display = 'flex';
+      } else {
+        if(pinError) pinError.style.display = 'block';
+      }
+    });
+
+    pinInput.addEventListener('keydown', function(e){
+      if(e.key === 'Enter') pinSubmit.click();
+    });
+
+    if(enterBtn){
+      enterBtn.addEventListener('click', function(){
+        if(messageOverlay) messageOverlay.style.display = 'none';
+        if(typeof loadTracks === 'function'){ loadTracks(); }
+      });
+    }
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', bindPinAndEnter);
+  } else {
+    bindPinAndEnter();
+  }
+})();
+</script>
+
 const pinInput = document.getElementById("pinInput");
 const pinSubmit = document.getElementById("pinSubmit");
 const pinError = document.getElementById("pinError");
@@ -144,3 +191,4 @@ loadTracks();
 </script>
 </body>
 </html>
+
